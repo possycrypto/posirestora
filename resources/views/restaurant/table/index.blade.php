@@ -56,18 +56,19 @@
 
 @section('javascript')
     <script type="text/javascript">
-        $(document).ready(function(){
+        // $(document).ready(function(){
 
             $(document).on('submit', 'form#table_add_form', function(e){
                 e.preventDefault();
                 var data = $(this).serialize();
-
+                // var a = <a href="{{ url('/modules/tables/qr-code/2') }}" target="_blank" class="btn btn-xs btn-danger3">QR Code</a>
                 $.ajax({
                     method: "POST",
                     url: $(this).attr("action"),
                     dataType: "json",
                     data: data,
                     success: function(result){
+                        console.log(result);
                         if(result.success == true){
                             $('div.tables_modal').modal('hide');
                             toastr.success(result.msg);
@@ -93,7 +94,8 @@
                         { data: 'name', name: 'res_tables.name'  },
                         { data: 'location', name: 'BL.name'},
                         { data: 'description', name: 'description'},
-                        { data: 'action', name: 'action'}
+                        { data: 'action', name: 'action'},
+                        // { data: 'qrcode', name: 'QR'}   
                     ],
                 });
 
@@ -113,6 +115,7 @@
                             dataType: "json",
                             data: data,
                             success: function(result){
+                                console.log(result);
                                 if(result.success == true){
                                     $('div.tables_modal').modal('hide');
                                     toastr.success(result.msg);
@@ -155,6 +158,12 @@
                     }
                 });
             });
-        });
+
+            $(document).on('click', 'button.qrlink', function(){
+                var table = $(this).parent().parent()[0].childNodes[0].innerText;
+                var location = $(this).parent().parent()[0].childNodes[1].innerText;
+                var url = "{{ url('/modules/tables/qr-code/') }}/"+table+"/"+location;
+                window.location= url;
+            });
     </script>
 @endsection

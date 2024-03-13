@@ -95,7 +95,7 @@ Route::middleware(['setData'])->group(function () {
     Route::post('/confirm-payment/{id}', [SellPosController::class, 'confirmPayment'])
         ->name('confirm_payment');
     // Test QRcode
-    Route::get('/qrcode/{data}', [SellPosController::class, 'qrcode']);
+    // Route::get('/qrcode/{data}', [SellPosController::class, 'qrcode']);
 });
 
 //Routes for authenticated users only
@@ -422,6 +422,7 @@ Route::middleware(['setData', 'auth', 'SetSessionData', 'language', 'timezone', 
     //Restaurant module
     Route::prefix('modules')->group(function () {
         Route::resource('tables', Restaurant\TableController::class);
+        Route::get('tables/qr-code/{table}/{location}', [SellPosController::class, 'qrcode']);
         Route::resource('modifiers', Restaurant\ModifierSetsController::class);
 
         //Map modifier to products

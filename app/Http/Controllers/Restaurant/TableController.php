@@ -8,6 +8,7 @@ use Datatables;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class TableController extends Controller
 {
@@ -21,7 +22,7 @@ class TableController extends Controller
         if (! auth()->user()->can('access_tables')) {
             abort(403, 'Unauthorized action.');
         }
-
+        
         if (request()->ajax()) {
             $business_id = request()->session()->get('user.business_id');
 
@@ -39,9 +40,13 @@ class TableController extends Controller
                     @endrole
                     @role("Admin#'.$business_id.'")
                         <button data-href="{{action(\'App\Http\Controllers\Restaurant\TableController@destroy\', [$id])}}" class="btn btn-xs btn-danger delete_table_button"><i class="glyphicon glyphicon-trash"></i> @lang("messages.delete")</button>
+                    @endrole
+                    @role("Admin#'.$business_id.'")
+                        <button class="btn btn-xs btn-outline-secondary qrlink"><i class="glyphicon glyphicon-qrcode">
+                        QR Code</i></button>
                     @endrole'
                 )
-                ->removeColumn('id')
+                // ->removeColumn('id')
                 ->escapeColumns(['action'])
                 ->make(true);
         }
@@ -204,4 +209,27 @@ class TableController extends Controller
             return $output;
         }
     }
+
+    // public function getQrCode($id)
+    // {
+    //     var_dump($id);
+    //     // return $id;
+    // }
+
+    public function getQrCode($table, $location)
+    {
+        // return view('qrcode.qr_table');
+        // $renderer = new Png();
+        // $renderer->setHeight(300);
+        // $renderer->setWidth(300);
+
+        // $writer = new Writer($renderer);
+        // $data = $writer->writeString('123456');
+
+        // return response($data)->header('Content-Type', 'image/png');
+        $string = $table.'/'.$location;
+        return QrCode::size(200)->generate($string);
+
+    }
+
 }

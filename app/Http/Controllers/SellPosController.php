@@ -3085,17 +3085,18 @@ class SellPosController extends Controller
         return ['success' => true];
     }
 
-    public function qrcode($data)
+    public function qrcode($table, $location)
     {
-        // return view('qrcode.qr_table');
-        // $renderer = new Png();
-        // $renderer->setHeight(300);
-        // $renderer->setWidth(300);
+    //     // return view('qrcode.qr_table');
+    //     // $renderer = new Png();
+    //     // $renderer->setHeight(300);
+    //     // $renderer->setWidth(300);
 
-        // $writer = new Writer($renderer);
-        // $data = $writer->writeString('123456');
+    //     // $writer = new Writer($renderer);
+    //     // $data = $writer->writeString('123456');
 
-        // return response($data)->header('Content-Type', 'image/png');
+    //     // return response($data)->header('Content-Type', 'image/png');
+        $data = $table.'/'.$location;
         return QrCode::size(200)->generate($data);
 
     }
